@@ -1,0 +1,369 @@
+{
+   "geocoded_waypoints" : [
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "ChIJy-z5i18alTURP4V2gaGOgZY",
+         "types" : [ "establishment", "point_of_interest", "transit_station" ]
+      },
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "ChIJyXsMpF0alTURAOY_NJyY1U8",
+         "types" : [ "establishment", "point_of_interest" ]
+      }
+   ],
+   "routes" : [
+      {
+         "bounds" : {
+            "northeast" : {
+               "lat" : 36.7065579,
+               "lng" : 119.1854509
+            },
+            "southwest" : {
+               "lat" : 36.7023932,
+               "lng" : 119.1759237
+            }
+         },
+         "copyrights" : "Map data ©2020",
+         "legs" : [
+            {
+               "distance" : {
+                  "text" : "1.5 公里",
+                  "value" : 1515
+               },
+               "duration" : {
+                  "text" : "4分钟",
+                  "value" : 241
+               },
+               "end_address" : "中国山东省潍坊市奎文区胜利东街华都鲁成大厦",
+               "end_location" : {
+                  "lat" : 36.7065579,
+                  "lng" : 119.1772408
+               },
+               "start_address" : "中国潍坊市奎文区健康街潍县中路口",
+               "start_location" : {
+                  "lat" : 36.7045897,
+                  "lng" : 119.1854509
+               },
+               "steps" : [
+                  {
+                     "distance" : {
+                        "text" : "37 米",
+                        "value" : 37
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 7
+                     },
+                     "end_location" : {
+                        "lat" : 36.7047135,
+                        "lng" : 119.1851888
+                     },
+                     "html_instructions" : "向\u003cb\u003e北\u003c/b\u003e行驶",
+                     "polyline" : {
+                        "points" : "uz__FalmvUMBSHDVBL"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7045897,
+                        "lng" : 119.1854509
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "52 米",
+                        "value" : 52
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 15
+                     },
+                     "end_location" : {
+                        "lat" : 36.70426399999999,
+                        "lng" : 119.1853314
+                     },
+                     "html_instructions" : "向\u003cb\u003e左\u003c/b\u003e转，前往\u003cb\u003e804省道\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003e健康东街\u003c/b\u003e",
+                     "maneuver" : "turn-left",
+                     "polyline" : {
+                        "points" : "m{__FmjmvUxA["
+                     },
+                     "start_location" : {
+                        "lat" : 36.7047135,
+                        "lng" : 119.1851888
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.8 公里",
+                        "value" : 850
+                     },
+                     "duration" : {
+                        "text" : "2分钟",
+                        "value" : 127
+                     },
+                     "end_location" : {
+                        "lat" : 36.7023932,
+                        "lng" : 119.1760839
+                     },
+                     "html_instructions" : "向\u003cb\u003e右\u003c/b\u003e转，进入\u003cb\u003e804省道\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003e健康东街\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003e继续沿健康东街前行\u003c/div\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "sx__FikmvULlAVtBHp@VtB@NTlBJv@fCzSn@lFf@`ERbBTfB"
+                     },
+                     "start_location" : {
+                        "lat" : 36.70426399999999,
+                        "lng" : 119.1853314
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.5 公里",
+                        "value" : 458
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 64
+                     },
+                     "end_location" : {
+                        "lat" : 36.7065083,
+                        "lng" : 119.1759237
+                     },
+                     "html_instructions" : "向\u003cb\u003e右\u003c/b\u003e转，进入\u003cb\u003e金马路\u003c/b\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "}l__FoqkvUoA@[@sHJ}ABoCBgABc@@}@@"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7023932,
+                        "lng" : 119.1760839
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.1 公里",
+                        "value" : 118
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 28
+                     },
+                     "end_location" : {
+                        "lat" : 36.7065579,
+                        "lng" : 119.1772408
+                     },
+                     "html_instructions" : "向\u003cb\u003e右\u003c/b\u003e转，进入\u003cb\u003e胜利东街\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003e目的地在左侧\u003c/div\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "uf`_FopkvUCgBEsC?K"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7065083,
+                        "lng" : 119.1759237
+                     },
+                     "travel_mode" : "DRIVING"
+                  }
+               ],
+               "traffic_speed_entry" : [],
+               "via_waypoint" : []
+            }
+         ],
+         "overview_polyline" : {
+            "points" : "uz__FalmvUa@LHd@xA[LlA`@fDz@jHrFnd@TfBoA@oILyIL}@@CgBE_D"
+         },
+         "summary" : "健康东街和金马路",
+         "warnings" : [],
+         "waypoint_order" : []
+      },
+      {
+         "bounds" : {
+            "northeast" : {
+               "lat" : 36.7069392,
+               "lng" : 119.1854509
+            },
+            "southwest" : {
+               "lat" : 36.7039003,
+               "lng" : 119.1764395
+            }
+         },
+         "copyrights" : "Map data ©2020",
+         "legs" : [
+            {
+               "distance" : {
+                  "text" : "1.4 公里",
+                  "value" : 1357
+               },
+               "duration" : {
+                  "text" : "5分钟",
+                  "value" : 279
+               },
+               "end_address" : "中国山东省潍坊市奎文区胜利东街华都鲁成大厦",
+               "end_location" : {
+                  "lat" : 36.7065579,
+                  "lng" : 119.1772408
+               },
+               "start_address" : "中国潍坊市奎文区健康街潍县中路口",
+               "start_location" : {
+                  "lat" : 36.7045897,
+                  "lng" : 119.1854509
+               },
+               "steps" : [
+                  {
+                     "distance" : {
+                        "text" : "37 米",
+                        "value" : 37
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 7
+                     },
+                     "end_location" : {
+                        "lat" : 36.7047135,
+                        "lng" : 119.1851888
+                     },
+                     "html_instructions" : "向\u003cb\u003e北\u003c/b\u003e行驶",
+                     "polyline" : {
+                        "points" : "uz__FalmvUMBSHDVBL"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7045897,
+                        "lng" : 119.1854509
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "52 米",
+                        "value" : 52
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 15
+                     },
+                     "end_location" : {
+                        "lat" : 36.70426399999999,
+                        "lng" : 119.1853314
+                     },
+                     "html_instructions" : "向\u003cb\u003e左\u003c/b\u003e转，前往\u003cb\u003e804省道\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003e健康东街\u003c/b\u003e",
+                     "maneuver" : "turn-left",
+                     "polyline" : {
+                        "points" : "m{__FmjmvUxA["
+                     },
+                     "start_location" : {
+                        "lat" : 36.7047135,
+                        "lng" : 119.1851888
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.2 公里",
+                        "value" : 167
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 41
+                     },
+                     "end_location" : {
+                        "lat" : 36.7039003,
+                        "lng" : 119.1835148
+                     },
+                     "html_instructions" : "向\u003cb\u003e右\u003c/b\u003e转，进入\u003cb\u003e804省道\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003e健康东街\u003c/b\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "sx__FikmvULlAVtBHp@VtB"
+                     },
+                     "start_location" : {
+                        "lat" : 36.70426399999999,
+                        "lng" : 119.1853314
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.3 公里",
+                        "value" : 340
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 52
+                     },
+                     "end_location" : {
+                        "lat" : 36.7069392,
+                        "lng" : 119.1839711
+                     },
+                     "html_instructions" : "向\u003cb\u003e右\u003c/b\u003e转，进入\u003cb\u003e222省道\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003e潍县中路\u003c/b\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "kv__F}_mvUgBOYCoBQkBMSAwAMa@E_AIOAEA]C"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7039003,
+                        "lng" : 119.1835148
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.7 公里",
+                        "value" : 672
+                     },
+                     "duration" : {
+                        "text" : "2分钟",
+                        "value" : 118
+                     },
+                     "end_location" : {
+                        "lat" : 36.70669,
+                        "lng" : 119.1764407
+                     },
+                     "html_instructions" : "向\u003cb\u003e左\u003c/b\u003e转，进入\u003cb\u003e胜利东街\u003c/b\u003e",
+                     "maneuver" : "turn-left",
+                     "polyline" : {
+                        "points" : "ki`_FybmvU?PFrD@|AB|AFjGBpBDxDFbFD|DBdC"
+                     },
+                     "start_location" : {
+                        "lat" : 36.7069392,
+                        "lng" : 119.1839711
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "89 米",
+                        "value" : 89
+                     },
+                     "duration" : {
+                        "text" : "1分钟",
+                        "value" : 46
+                     },
+                     "end_location" : {
+                        "lat" : 36.7065579,
+                        "lng" : 119.1772408
+                     },
+                     "html_instructions" : "\u003cb\u003e调头\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003e目的地在左侧\u003c/div\u003e",
+                     "maneuver" : "uturn-left",
+                     "polyline" : {
+                        "points" : "yg`_FwskvU^?EsC?K"
+                     },
+                     "start_location" : {
+                        "lat" : 36.70669,
+                        "lng" : 119.1764407
+                     },
+                     "travel_mode" : "DRIVING"
+                  }
+               ],
+               "traffic_speed_entry" : [],
+               "via_waypoint" : []
+            }
+         ],
+         "overview_polyline" : {
+            "points" : "uz__FalmvUa@LHd@xA[LlA`@fDVtBgBOiCUyFc@sBQL`KXzWHbI^?EsC?K"
+         },
+         "summary" : "222省道/潍县中路和胜利东街",
+         "warnings" : [],
+         "waypoint_order" : []
+      }
+   ],
+   "status" : "OK"
+}
