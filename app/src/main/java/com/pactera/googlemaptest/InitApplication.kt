@@ -13,7 +13,7 @@ public class InitApplication : Application() {
         ViseHttp.init(this);
         ViseHttp.CONFIG()
             //配置请求主机地址
-            .baseUrl("https://maps.googleapis.com/maps/api/");
+            .baseUrl(Config.GOOGLE_MAP_BASE_URL);
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, Config.API_KAY)
         }

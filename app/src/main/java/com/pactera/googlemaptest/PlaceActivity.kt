@@ -124,14 +124,25 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // 使用字段定义要返回的数据类型.
     var placeFields = listOf(
-        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
-        Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS,
-        Place.Field.RATING, Place.Field.USER_RATINGS_TOTAL, Place.Field.VIEWPORT,
+        Place.Field.ID,
+        Place.Field.NAME,
+        Place.Field.LAT_LNG,
+        Place.Field.ADDRESS,
+        Place.Field.ADDRESS_COMPONENTS,
+        Place.Field.RATING,
+        Place.Field.USER_RATINGS_TOTAL,
+        Place.Field.VIEWPORT,
 
-        Place.Field.TYPES,Place.Field.PLUS_CODE,  Place.Field.OPENING_HOURS,Place.Field.PHONE_NUMBER,
-        Place.Field.PRICE_LEVEL,Place.Field.UTC_OFFSET,Place.Field.WEBSITE_URI,
+        Place.Field.TYPES,
+        Place.Field.PLUS_CODE,
+        Place.Field.OPENING_HOURS,
+        Place.Field.PHONE_NUMBER,
+        Place.Field.PRICE_LEVEL,
+        Place.Field.UTC_OFFSET,
+        Place.Field.WEBSITE_URI,
 
-        Place.Field.PHOTO_METADATAS, Place.Field.BUSINESS_STATUS
+        Place.Field.PHOTO_METADATAS,
+        Place.Field.BUSINESS_STATUS
     )
 
     //根据placeId，可以获取 地点 和 照片 等相关信息
@@ -147,7 +158,7 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.i(TAG, "getPlaceInfo: addOnSuccessListener response=$response")
             val address = response.place.address
             Log.i(TAG, "getPlaceInfo: addOnSuccessListener address=$address")
-              Toast.makeText(this,"${address}",Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "${response}", Toast.LENGTH_LONG).show()
 
             // responseView.text = StringUtil.stringify(response, isDisplayRawResultsChecked)
         }

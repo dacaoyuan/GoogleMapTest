@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoogleMapTest</string>
+    <string name="app_name">GMTest</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
 

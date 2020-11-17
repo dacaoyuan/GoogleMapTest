@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
+import com.pactera.googlemaptest.adapter.NearbyPlaceAdapter
 import com.pactera.googlemaptest.model.NearbyModel
-import com.pactera.googlemaptest.model.PlaceModel
 import com.vise.xsnow.http.ViseHttp
 import com.vise.xsnow.http.callback.ACallback
 import kotlinx.android.synthetic.main.activity_nearby_search.*
@@ -26,7 +26,8 @@ class NearbySearchActivity : AppCompatActivity() {
 
 
         mRecyclerView.layoutManager = LinearLayoutManager(this);
-        mNearbyPlaceAdapter = NearbyPlaceAdapter();
+        mNearbyPlaceAdapter =
+            NearbyPlaceAdapter();
         mRecyclerView.adapter = mNearbyPlaceAdapter;
 
         getNearbyPlace(mLatLng);
@@ -38,10 +39,10 @@ class NearbySearchActivity : AppCompatActivity() {
     private fun getNearbyPlace(mLatLng: LatLng) {
 
         ViseHttp.GET("place/nearbysearch/json")
-            .tag("tag1")
+            .tag(TAG)
 
             .addParam("location", "${mLatLng.latitude},${mLatLng.longitude}")
-            .addParam("radius", "5")
+            .addParam("radius", "1000") //半径1000 米
             //.addParam("type", "restaurant")  //搜索结果期望的类型，例如：超市，咖啡馆，学校等等 https://developers.google.cn/places/web-service/supported_types
             // .addParam("keyword", "cruise")//搜索结果期望包含的关键字
 

@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoogleMapTest">
-        <activity android:name=".NearbySearchActivity"></activity>
+        <activity android:name=".ExampleActivity"></activity>
+        <activity android:name=".NearbySearchActivity" />
         <activity android:name=".PlaceActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
