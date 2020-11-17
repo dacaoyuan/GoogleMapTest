@@ -9,11 +9,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Looper
+import android.location.Location
+import android.os.*
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,7 +34,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.ui.IconGenerator
 import com.pactera.googlemaptest.model.LineModule
-import com.pactera.googlemaptest.utils.BitmapUtil
 import com.pactera.googlemaptest.utils.StringUtil
 import com.vise.xsnow.http.ViseHttp
 import com.vise.xsnow.http.callback.ACallback
@@ -59,6 +58,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         setContentView(R.layout.activity_main)
 
         getPermission()
+
 
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager;
         // mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -175,6 +175,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                     val place = Autocomplete.getPlaceFromIntent(data!!)
                     val result = StringUtil.stringifyAutocompleteWidget(place, true)
                     Log.i(TAG, "onActivityResult: result=${result}")
+                    //Toast.makeText(this, "${result}", Toast.LENGTH_LONG).show()
+
+                    mGoogleMap!!.addMarker(
+                        MarkerOptions()
+                            .position(place.latLng!!)
+                            .title(place.name)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                            .snippet(place.address)
+                    )
+                    val viewport = place.viewport
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(viewport, 50))
 
                     // Log.i(TAG, "onActivityResult: data=${data!!.extras.toString()}")
                 }
@@ -253,6 +264,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
     override fun onMapReady(googleMap: GoogleMap?) {
         mGoogleMap = googleMap ?: return
+
 
         with(googleMap) {
             // 移动地图到指定经度的位置
@@ -631,6 +643,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
         val locationResult = fusedLocationProviderClient.lastLocation
 
+
+
         locationResult.addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
 
@@ -638,29 +652,32 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                 // Set the map's camera position to the current location of the device.
                 var lastKnownLocation = task.result
                 if (lastKnownLocation != null) {
-                    Log.i(TAG, "getDeviceLocation:  locationResult if")
+                    Log.i(TAG, "getDeviceLocation:  locationResult if" + lastKnownLocation.speed)
 
                     val currentLocation =
                         LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
 
+                    //calculationDirection(currentLocation,lastKnownLocation)
 
 
-
-
-                    mGoogleMap?.animateCamera(
+                    mGoogleMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             currentLocation,
                             17.3f
                         )
                     )
 
-                    mGoogleMap!!.addMarker(
-                        MarkerOptions()
-                            .position(currentLocation)
-                            .title("我的位置")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_location_on_deep_purple_700_48dp))
-                    )
-
+                    if (isFirstLocation) {
+                        mPositionMarker = mGoogleMap!!.addMarker(
+                            MarkerOptions()
+                                .position(currentLocation)
+                                .title("我的位置")
+                                .rotation(azimuth)
+                                .anchor(0f, 0.5f)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_change_history_red_a700_24dp))
+                        )
+                    }
+                    mPositionMarker!!.position = currentLocation;
 
                     val circle: Circle = mGoogleMap!!.addCircle(
                         CircleOptions().apply {
@@ -710,20 +727,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
     override fun onResume() {
         super.onResume()
         val orientationSensor: Sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-        //mSensorManager.registerListener(this, orientationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, orientationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     override fun onPause() {
         super.onPause()
-        //mSensorManager.unregisterListener(this);
+        mSensorManager.unregisterListener(this);
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
+    var mPositionMarker: Marker? = null
+    var azimuth = 0f
     override fun onSensorChanged(event: SensorEvent?) {
+
+        if (event!!.sensor.type == Sensor.TYPE_ORIENTATION) {
+
+        }
+
         //（需要手机屏幕向上，向下的话南北会反掉）设备绕Z轴旋转，Y轴正方向与地磁北极方向的夹角，顺时针方向为正，范围【0，180】
-        val azimuth = event!!.values[0]
+        azimuth = event!!.values[0] //Sensor.TYPE_GYROSCOPE
         //设备绕X轴旋转的角度，当Z轴向Y轴正方向旋转时为正，反之为负，范围【-180,180】
         val pitch = event!!.values[1]
         //设备绕Y轴旋转的角度，当Z轴向X轴正方向旋转时为负，反之为正，范围【-90,90】
@@ -732,56 +757,64 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
         Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
 
-        // calculationDirection(azimuth);
+        if (mPositionMarker != null) {
+            mPositionMarker!!.rotation = azimuth
+        }
+
     }
 
-    private fun calculationDirection(rotate: Float) {
+
+    private fun calculationDirection(
+        currentLocation: LatLng,
+        rotate: Float,
+        lastKnownLocation: Location
+    ) {
         if (mGoogleMap == null) {
             return
         }
-        val rotateBitmap = BitmapUtil.rotateBitmap(
-            BitmapFactory.decodeResource(
-                resources,
-                R.drawable.baseline_change_history_red_a700_24dp
-            ),
-            rotate
-        )
-        //添加标记到指定经纬度
-        mGoogleMap.addMarker(
-            MarkerOptions()
-                .position(appointLoc)
-                .title("起点")
-                .snippet("$appointLoc")
-                .rotation(90f)
-                .flat(true)
-                .icon(BitmapDescriptorFactory.fromBitmap(rotateBitmap))
-        )
-
-
-        /* val arrowBitmap = BitmapFactory.decodeResource(
-             resources,
-             R.drawable.baseline_change_history_red_a700_24dp
+        /* val rotateBitmap = BitmapUtil.rotateBitmap(
+             BitmapFactory.decodeResource(
+                 resources,
+                 R.drawable.baseline_change_history_red_a700_24dp
+             ),
+             rotate
          )
-
-         // 将GeoPoint转换为屏幕像素
-         val toScreenLocation: Point = mGoogleMap.projection.toScreenLocation(currentLocation)
-         //val screenPts: Point = mGoogleMap.projection.toPixels(currentLocation, null)
-
-         val x = toScreenLocation.x
-         val y = toScreenLocation.y
-
-
-         val matrix: Matrix = Matrix();
-         matrix.postRotate(0f)
-         val rotatedBmp: Bitmap = Bitmap.createBitmap(
-             arrowBitmap,
-             0,
-             0,
-             arrowBitmap.width,
-             arrowBitmap.height,
-             matrix,
-             true
+         //添加标记到指定经纬度
+         mGoogleMap.addMarker(
+             MarkerOptions()
+                 .position(appointLoc)
+                 .title("起点")
+                 .snippet("$appointLoc")
+                 .rotation(90f)
+                 .flat(true)
+                 .icon(BitmapDescriptorFactory.fromBitmap(rotateBitmap))
          )*/
+
+
+        val arrowBitmap = BitmapFactory.decodeResource(
+            resources,
+            R.drawable.baseline_change_history_red_a700_24dp
+        )
+
+        // 将GeoPoint转换为屏幕像素
+        val toScreenLocation: Point = mGoogleMap.projection.toScreenLocation(currentLocation)
+        //val screenPts: Point = mGoogleMap.projection.toPixels(currentLocation, null)
+
+        val x = toScreenLocation.x
+        val y = toScreenLocation.y
+        println("MainActivity.calculationDirection x=$x y=$y")
+
+        val matrix: Matrix = Matrix();
+        matrix.postRotate(0f)
+        val rotatedBmp: Bitmap = Bitmap.createBitmap(
+            arrowBitmap,
+            0,
+            0,
+            arrowBitmap.width,
+            arrowBitmap.height,
+            matrix,
+            true
+        )
 
 
     }

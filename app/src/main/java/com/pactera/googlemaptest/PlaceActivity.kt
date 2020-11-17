@@ -99,6 +99,7 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
                     //请求成功，AuthorModel为解析服务器返回数据的对象，可以是String，按需定义即可
                     // Log.i(TAG, "onSuccess: mBean=> $mBean")
                     val results = mBean!!.results
+
                     results.forEach {
                         val placeId = it.place_id
                         Log.i(TAG, "onSuccess: placeId=> $placeId")

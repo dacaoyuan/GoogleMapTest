@@ -52,13 +52,15 @@ class NearbySearchActivity : AppCompatActivity() {
             .request(object : ACallback<NearbyModel?>() {
                 override fun onSuccess(mBean: NearbyModel?) {
                     //请求成功，AuthorModel为解析服务器返回数据的对象，可以是String，按需定义即可
-
+                    // Log.i(TAG, " mBeanStr=${mBean}")
 
                     if (mBean!!.status == "OK") {
                         val resultList = mBean.results
                         val name = resultList[0].name
                         Log.i(TAG, "onSuccess: name=> $name")
                         mNearbyPlaceAdapter.setNewData(resultList)
+                    } else {
+                        Log.i(TAG, " errCode=${mBean!!.status}")
                     }
 
                 }
