@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -48,7 +49,9 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
         mExampleAdapter.addFooterView(
             LayoutInflater.from(this).inflate(R.layout.footer_view, null).apply {
                 setOnClickListener {
-                    Log.i(TAG, "onCreate: dddddd")
+                    placeRV.visibility = View.GONE
+
+                    //
                 }
             })
 
@@ -103,38 +106,30 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
                 val nameResult = pointOfInterest!!.name
                 val placeId = pointOfInterest!!.placeId
 
-                if (mExampleAdapter.data.size <= 2) {
 
-                    for (bean in mExampleAdapter.data) {
-                        if (bean.name=="选择起点") {
-                            bean.name=nameResult;
-                            break
-                        } else  if (bean.name=="选择目的地") {
-                            bean.name=nameResult;
-                            break
-                        }
+                var isSelectFirstAndEnd = true
+                for (bean in mExampleAdapter.data) {
+                    if (bean.name == "选择起点") {
+                        isSelectFirstAndEnd = false;
+                        bean.name = nameResult;
+                        break
+                    } else if (bean.name == "选择目的地") {
+                        isSelectFirstAndEnd = false;
+                        bean.name = nameResult;
+                        break
                     }
-                    mExampleAdapter.notifyDataSetChanged()
-
-
-                    var isSelectFirstAndEnd=true
-                    for (bean in mExampleAdapter.data) {
-                        if (bean.name=="选择起点") {
-                            isSelectFirstAndEnd=false;
-                        } else  if (bean.name=="选择目的地") {
-                            isSelectFirstAndEnd=false;
-                        }
-                    }
-
-                    if (isSelectFirstAndEnd) {
-                        //更新adapter数据后，需要调接口，获取路线信息
-                    }
-
-                }else{
-                    mExampleAdapter.addData(ExampleBean().apply { name = nameResult })
-                    //更新adapter数据后，需要调接口，获取路线信息
                 }
 
+                if (isSelectFirstAndEnd) {
+                    //底部弹窗
+
+
+                    // mExampleAdapter.addData(ExampleBean().apply { name = nameResult })
+                    //更新adapter数据后，需要调接口，获取路线信息
+                } else {
+
+                    mExampleAdapter.notifyDataSetChanged()
+                }
 
 
 
