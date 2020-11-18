@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
             startActivity(Intent(this, PlaceActivity::class.java).apply {
                 putExtra(
                     "latLng",
-                    appointLoc
+                    fuHuaLoc
                 )
             })
         }
@@ -237,6 +237,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
     //潍坊软件园 LatLng(纬度,经度)
     val strOrigin = "36.70458915541349,119.1854485767212"
 
+    //富华游乐园
+    val strFuhua = "36.71525382744859,119.16037559509276"
+
     // 航路点
     val strWaypoints1 = "36.699094372900944,119.18357335031034"
     val strWaypoints2 = "36.69567948422026,119.18077178299427"
@@ -252,6 +255,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
     val appointLoc = LatLng(
         strOrigin.split(",").toTypedArray()[0].toDouble(),
         strOrigin.split(",").toTypedArray()[1].toDouble()
+    );
+
+    val fuHuaLoc = LatLng(
+        strFuhua.split(",").toTypedArray()[0].toDouble(),
+        strFuhua.split(",").toTypedArray()[1].toDouble()
     );
 
 
@@ -654,10 +662,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                 if (lastKnownLocation != null) {
                     Log.i(TAG, "getDeviceLocation:  locationResult if")
 
-                    val currentLocation =
-                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    val currentLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
 
-                    //calculationDirection(currentLocation,lastKnownLocation)
 
 
                     mGoogleMap.animateCamera(
@@ -761,9 +767,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
         Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
 
-        /*if (mPositionMarker != null) {
+        if (mPositionMarker != null) {
             mPositionMarker!!.rotation = azimuth
-        }*/
+        }
 
     }
 

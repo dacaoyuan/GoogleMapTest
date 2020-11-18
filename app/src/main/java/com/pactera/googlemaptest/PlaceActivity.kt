@@ -8,9 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
@@ -42,6 +40,7 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private var selectMarker: Marker? = null
 
     override fun onMapReady(mGoogleMap: GoogleMap?) {
         this.mGoogleMap = mGoogleMap ?: return;
@@ -51,31 +50,46 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
             // 移动地图到指定经度的位置
             moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 15f))
 
-            addMarker(
+           /* addMarker(
                 MarkerOptions()
                     .position(mLatLng)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                //.title("GetPlace")
-                //.snippet("$latLng")
-            )
-            setOnMapLongClickListener { latLng ->
-                Log.i(TAG, "onMapReady: 地图长按点击事件")
-                //currentSelectMarkerLatLng=latLng;
-                mGoogleMap!!.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title("GetPlace")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                        .snippet("$latLng")
-                )
+                    .title("GetPlace")
+                    .snippet("$mLatLng")
+            ).showInfoWindow()*/
 
-                setOnInfoWindowClickListener { mMarker ->
-                    val position = mMarker!!.position
-                    Log.i(TAG, "setOnInfoWindowClickListener: position=$position")
-                    getPlaceId(mLatLng)
+            /* setOnMapLongClickListener { latLng ->
+                 Log.i(TAG, "onMapReady: 地图长按点击事件")
+                 //currentSelectMarkerLatLng=latLng;
+                 selectMarker = mGoogleMap!!.addMarker(
+                     MarkerOptions()
+                         .position(latLng)
+                         .title("GetPlace")
+                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                         .snippet("$latLng")
+                 )
+
+                 setOnInfoWindowClickListener { mMarker ->
+                     val position = mMarker!!.position
+                     Log.i(TAG, "setOnInfoWindowClickListener: position=$position")
+                     getPlaceId(mLatLng)
+
+                 }
+             }*/
+            getPlaceId(mLatLng)
+
+
+            setOnPoiClickListener(object : GoogleMap.OnPoiClickListener {
+                override fun onPoiClick(p0: PointOfInterest?) {
+                    val latLng = p0!!.latLng
+                    val name = p0!!.name
+                    val placeId = p0!!.placeId
+
+                    getPlaceInfo(placeId)
 
                 }
-            }
+
+            })
         }
 
 
@@ -161,8 +175,19 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
         placeTask.addOnSuccessListener { response: FetchPlaceResponse ->
             Log.i(TAG, "getPlaceInfo: addOnSuccessListener response=$response")
             val address = response.place.address
+            val name = response.place.name
+            val latLng = response.place.latLng
             Log.i(TAG, "getPlaceInfo: addOnSuccessListener address=$address")
-            Toast.makeText(this, "${response}", Toast.LENGTH_LONG).show()
+            //Toast.makeText(this, "${response}", Toast.LENGTH_LONG).show()
+
+            selectMarker = mGoogleMap!!.addMarker(
+                MarkerOptions()
+                    .position(latLng!!)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+            )
+            selectMarker!!.title = "$name"
+            selectMarker!!.snippet = "评分：${response.place.rating}    总评分：${response.place.userRatingsTotal}"
+            selectMarker!!.showInfoWindow()
 
             // responseView.text = StringUtil.stringify(response, isDisplayRawResultsChecked)
         }
