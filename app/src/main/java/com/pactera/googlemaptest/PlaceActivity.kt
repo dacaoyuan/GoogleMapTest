@@ -1,9 +1,9 @@
 package com.pactera.googlemaptest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,9 +17,9 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.pactera.googlemaptest.model.PlaceModel
-import com.pactera.googlemaptest.utils.StringUtil
 import com.vise.xsnow.http.ViseHttp
 import com.vise.xsnow.http.callback.ACallback
+import java.util.*
 
 class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -124,7 +124,7 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // 使用字段定义要返回的数据类型.
-    var placeFields = listOf(
+    private var placeFields: List<Place.Field> = listOf(
         Place.Field.ID,
         Place.Field.NAME,
         Place.Field.LAT_LNG,
@@ -148,6 +148,9 @@ class PlaceActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //根据placeId，可以获取 地点 和 照片 等相关信息
     private fun getPlaceInfo(placeId: String) {
+        val argsd = arrayOf("1", "2", "3")
+        val argsd1 = arrayOf(1, 2, 3)
+
 
         //获取所有信息
         //placeFields = listOf(*Place.Field.values())

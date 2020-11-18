@@ -652,7 +652,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                 // Set the map's camera position to the current location of the device.
                 var lastKnownLocation = task.result
                 if (lastKnownLocation != null) {
-                    Log.i(TAG, "getDeviceLocation:  locationResult if" + lastKnownLocation.speed)
+                    Log.i(TAG, "getDeviceLocation:  locationResult if")
 
                     val currentLocation =
                         LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
@@ -667,14 +667,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                         )
                     )
 
+
+
                     if (isFirstLocation) {
+                        val fbearin=  lastKnownLocation.bearing //和道路一个方向
+                        println("MainActivity.getDeviceLocation fbearin="+fbearin)
                         mPositionMarker = mGoogleMap!!.addMarker(
                             MarkerOptions()
                                 .position(currentLocation)
                                 .title("我的位置")
-                                .rotation(azimuth)
-                                .anchor(0f, 0.5f)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_change_history_red_a700_24dp))
+                                .rotation(fbearin)
+                                .anchor(0.5f, 0.5f)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_arrow_circle_up_red_900_24dp))
                         )
                     }
                     mPositionMarker!!.position = currentLocation;
@@ -684,7 +688,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                             center(currentLocation)
                             if (isFirstLocation) {
                                 radius(100.00)
-                                strokeWidth(5f)
+                                strokeWidth(3f)
                                 strokeColor(
                                     ContextCompat.getColor(
                                         this@MainActivity,
@@ -757,9 +761,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
         Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
 
-        if (mPositionMarker != null) {
+        /*if (mPositionMarker != null) {
             mPositionMarker!!.rotation = azimuth
-        }
+        }*/
 
     }
 

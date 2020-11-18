@@ -3,6 +3,8 @@ package com.pactera.googlemaptest;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -12,15 +14,18 @@ import okhttp3.Response;
 
 public class test {
 
-    public void test11(){
-        String dd="36.70661050620801,119.18400018385316";
+    public void test11() {
+        String dd = "36.70661050620801,119.18400018385316";
         String[] split = dd.split(",");
+
+        String[] argsd = {"1", "2", "3"};
+        Integer[] argsd1 = {1, 2, 3};
     }
 
 
-    public void ddd(){
-        OkHttpClient okHttpClient=new OkHttpClient();
-        final Request request=new Request.Builder()
+    public void ddd() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        final Request request = new Request.Builder()
                 .url("https://www.wanandroid.com/navi/json")
                 .get()
                 .build();
@@ -28,7 +33,7 @@ public class test {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("okhttp_error",e.getMessage());
+                Log.d("okhttp_error", e.getMessage());
             }
 
             @Override
@@ -37,8 +42,6 @@ public class test {
             }
         });
     }
-
- 
 
 
 }
