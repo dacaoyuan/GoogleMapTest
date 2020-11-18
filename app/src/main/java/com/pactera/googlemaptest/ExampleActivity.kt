@@ -3,6 +3,7 @@ package com.pactera.googlemaptest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
@@ -12,7 +13,7 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mGoogleMap: GoogleMap
 
     //潍坊软件园 LatLng(纬度,经度)
-   // val strOrigin = "36.70458915541349,119.1854485767212"
+    // val strOrigin = "36.70458915541349,119.1854485767212"
 
     //富华游乐园
     val strOrigin = "36.71525382744859,119.16037559509276"
@@ -34,7 +35,6 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-
     override fun onMapReady(mGoogleMap: GoogleMap?) {
         this.mGoogleMap = mGoogleMap ?: return;
         with(mGoogleMap) {
@@ -48,8 +48,11 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(appointLoc)
                     .title("富华游乐园")
                     .snippet("$appointLoc")
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_change_history_red_a700_24dp))
-            ).showInfoWindow()
+                     //设置谷歌地图自带的图标样式
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                     //设置本地资源图标
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_change_history_red_a700_24dp))
+            ).showInfoWindow() //显示信息窗口
 
 
         }

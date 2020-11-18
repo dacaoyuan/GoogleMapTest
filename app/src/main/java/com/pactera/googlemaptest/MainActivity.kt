@@ -325,6 +325,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
         mGoogleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
             override fun onMarkerClick(mMarker: Marker?): Boolean {
+                Log.i(TAG, "onMapReady: Marker点击事件")
                 val position = mMarker!!.position
                 Log.i(TAG, "onMarkerClick: position=$position")
 
@@ -334,6 +335,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         })
 
         mGoogleMap.setOnInfoWindowClickListener { mMarker ->
+            Log.i(TAG, "onMapReady: Marker 弹窗点击事件")
             val position = mMarker!!.position
             Log.i(TAG, "setOnInfoWindowClickListener: position=$position")
             startActivity(Intent(this, NearbySearchActivity::class.java).apply {
@@ -350,6 +352,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
         mGoogleMap.setOnPoiClickListener(object : GoogleMap.OnPoiClickListener {
             override fun onPoiClick(mPointOfInterest: PointOfInterest?) {
+                Log.i(TAG, "onMapReady: Poi 点击事件")
                 val latLng = mPointOfInterest!!.latLng
                 val name = mPointOfInterest.name
                 Log.i(TAG, "setOnInfoWindowClickListener: setOnPoiClickListener latLng=$latLng")
@@ -628,7 +631,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
 
     private fun getDeviceLocation() {
-        //这行代码，就能发起定位请求
+
         val selfPermission4 =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (selfPermission4 != PackageManager.PERMISSION_GRANTED) {
@@ -649,6 +652,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         mGoogleMap.isMyLocationEnabled = false
         mGoogleMap.uiSettings?.isMyLocationButtonEnabled = true
 
+        //这行代码，就能发起定位请求
         val locationResult = fusedLocationProviderClient.lastLocation
 
 
@@ -765,7 +769,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         val roll = event!!.values[2]
 
         // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
-        Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
+       // Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
 
         if (mPositionMarker != null) {
             mPositionMarker!!.rotation = azimuth
@@ -837,7 +841,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
      *  监听位置变化
      */
     private fun monitorLocationChange() {
-        //这行代码，就能发起定位请求
+
         val selfPermission4 =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (selfPermission4 != PackageManager.PERMISSION_GRANTED) {
@@ -858,10 +862,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
         val request = LocationRequest()
         request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        //设置间隔
         request.setInterval(3000)
-        //request.fastestInterval = 3000
+        //最快间隔
         request.fastestInterval = 3000
-        request.numUpdates
+        //更新的次数哦
+        //request.numUpdates=1
 
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
