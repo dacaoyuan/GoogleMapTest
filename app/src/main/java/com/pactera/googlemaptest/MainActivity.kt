@@ -421,7 +421,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
             //.addParam("alternatives", "true") //如果设置为 true,这仅适用于没有中间航路点的请求。
             //.addParam("avoid", "tolls|highways|ferries")
 
-            .addParam("destination", strDestination)
             .addParam("key", Config.API_KAY)
 
 

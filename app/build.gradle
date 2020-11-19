@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 
-
+    api 'com.github.SheHuan:NiceDialog:1.2.0'
 
 
 }
