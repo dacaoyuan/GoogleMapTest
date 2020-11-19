@@ -99,7 +99,7 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
             mExampleAdapter.remove(position)
             if (mExampleAdapter.data.size > 2) {
                 getLineInfo(true)
-            } else {
+            } else if (mExampleAdapter.data.size == 2) {
                 getLineInfo(false)
             }
 
@@ -450,7 +450,7 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
                     val legs = it.legs
                     Log.i(TAG, "legs.size=${legs.size}")
                     //总时间显示处理
-                    // calculateTotalTime(legs)
+                    calculateTotalTime(legs)
 
 
                     // 包含该路线的简短文字说明，适用于对路线进行命名和消除歧义。
@@ -516,6 +516,12 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
         for (index in legs.indices) {
             val legsDTO = legs[index]
 
+            val valuedistance = legsDTO.distance.value
+            Log.i(TAG, "calculateTotalTime valuedistance=${valuedistance}")
+
+            val textdistance = legsDTO.distance.text
+            Log.i(TAG, "calculateTotalTime textdistance=${textdistance}")
+
             val value = legsDTO.duration.value
             Log.i(TAG, "calculateTotalTime value=${value}")
 
@@ -524,27 +530,36 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.i(TAG, "calculateTotalTime text=${text}")
 
             val steps = legsDTO.steps
-            Log.i(TAG, "calculateTotalTime steps.size=${steps.size}")
-            if (steps != null && steps.size > 0) {
 
+
+            if (steps != null && steps.size > 0) {
+                Log.i(TAG, "calculateTotalTime steps.size=${steps.size}")
                 val j = Math.max(steps.size / 2, 1)
 
+
+
                 val endLocation = steps[j].end_location
-                addInfoWindowsToRoutes(LatLng(endLocation.lat, endLocation.lng), text);
+                addInfoWindowsToRoutes(
+                    LatLng(endLocation.lat, endLocation.lng),
+                    text,
+                    textdistance
+                );
+            } else {
+                Log.i(TAG, "calculateTotalTime steps.size is null or 0")
             }
 
-            if (index != legs.size - 1) {
-                val endAddressLegs = legsDTO.end_address
-                Log.i(TAG, "calculateTotalTime endAddressLegs=${endAddressLegs}")
-                val endLocationLegs = legsDTO.end_location
-                mGoogleMap.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(endLocationLegs.lat, endLocationLegs.lng))
-                        .title("途径地点")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_commute_red_400_24dp))
+            /* if (index != legs.size - 1) {
+                 val endAddressLegs = legsDTO.end_address
+                 Log.i(TAG, "calculateTotalTime endAddressLegs=${endAddressLegs}")
+                 val endLocationLegs = legsDTO.end_location
+                 mGoogleMap.addMarker(
+                     MarkerOptions()
+                         .position(LatLng(endLocationLegs.lat, endLocationLegs.lng))
+                         .title("途径地点")
+                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_commute_red_400_24dp))
 
-                )
-            }
+                 )
+             }*/
 
         }
 
@@ -573,10 +588,10 @@ class ExampleActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * 将信息窗口添加到路线
      */
-    private fun addInfoWindowsToRoutes(mLatLng: LatLng, text: String) {
+    private fun addInfoWindowsToRoutes(mLatLng: LatLng, text: String, textdistance: String) {
         val iconFactory = IconGenerator(this)
         //iconFactory.setStyle(IconGenerator.STYLE_RED)
-        val makeIcon: Bitmap = iconFactory.makeIcon(text)
+        val makeIcon: Bitmap = iconFactory.makeIcon("时间：$text  距离：$textdistance")
         val mBitmapDescriptor: BitmapDescriptor = BitmapDescriptorFactory.fromBitmap(makeIcon)
 
         mGoogleMap.addMarker(
