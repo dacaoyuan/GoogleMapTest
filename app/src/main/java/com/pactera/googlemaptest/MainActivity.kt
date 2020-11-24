@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
 
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager;
-        // mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -661,11 +660,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
 
                 // Set the map's camera position to the current location of the device.
-                var lastKnownLocation = task.result
+                val lastKnownLocation = task.result
                 if (lastKnownLocation != null) {
                     Log.i(TAG, "getDeviceLocation:  locationResult if")
 
-                    val currentLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    val currentLocation =
+                        LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
 
 
 
@@ -679,8 +679,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
 
                     if (isFirstLocation) {
-                        val fbearin=  lastKnownLocation.bearing //和道路一个方向
-                        println("MainActivity.getDeviceLocation fbearin="+fbearin)
+                        val fbearin = lastKnownLocation.bearing //和道路一个方向
+                        println("MainActivity.getDeviceLocation fbearin=" + fbearin)
                         mPositionMarker = mGoogleMap!!.addMarker(
                             MarkerOptions()
                                 .position(currentLocation)
@@ -739,8 +739,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
     override fun onResume() {
         super.onResume()
-        val orientationSensor: Sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-        mSensorManager.registerListener(this, orientationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        //加速度传感器
+        val accelerometer: Sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        if (accelerometer != null) {
+            mSensorManager.registerListener(
+                this,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        }
+        //地磁传感器
+        val magneticField: Sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        if (magneticField != null) {
+            mSensorManager.registerListener(
+                this,
+                magneticField,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        }
 
     }
 
@@ -752,26 +770,122 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
+    //加速度传感器数据
+    private val accelerometerReading = FloatArray(3)
+
+    //地磁传感器数据
+    private val magnetometerReading = FloatArray(3)
+
+    //旋转矩阵，用来保存磁场和加速度的数据
+    private val rotationMatrix = FloatArray(9)
+
+    //方向数据
+    private val orientationAngles = FloatArray(3)
+
+
     var mPositionMarker: Marker? = null
-    var azimuth = 0f
+    //var azimuth = 0f
     override fun onSensorChanged(event: SensorEvent?) {
-
-        if (event!!.sensor.type == Sensor.TYPE_ORIENTATION) {
-
+        //判断sensor类型
+        if (event!!.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            System.arraycopy(
+                event.values,
+                0,
+                accelerometerReading,
+                0,
+                accelerometerReading.size
+            );
+        } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            System.arraycopy(
+                event.values,
+                0,
+                magnetometerReading,
+                0,
+                magnetometerReading.size
+            );
         }
+        updateOrientationAngles();
 
-        //（需要手机屏幕向上，向下的话南北会反掉）设备绕Z轴旋转，Y轴正方向与地磁北极方向的夹角，顺时针方向为正，范围【0，180】
-        azimuth = event!!.values[0] //Sensor.TYPE_GYROSCOPE
-        //设备绕X轴旋转的角度，当Z轴向Y轴正方向旋转时为正，反之为负，范围【-180,180】
-        val pitch = event!!.values[1]
-        //设备绕Y轴旋转的角度，当Z轴向X轴正方向旋转时为负，反之为正，范围【-90,90】
-        val roll = event!!.values[2]
+        /* if (event!!.sensor.type == Sensor.TYPE_ORIENTATION) {
+            //（需要手机屏幕向上，向下的话南北会反掉）设备绕Z轴旋转，Y轴正方向与地磁北极方向的夹角，顺时针方向为正，范围【0，180】
+             azimuth = event!!.values[0] //Sensor.TYPE_GYROSCOPE
+             //设备绕X轴旋转的角度，当Z轴向Y轴正方向旋转时为正，反之为负，范围【-180,180】
+             val pitch = event!!.values[1]
+             //设备绕Y轴旋转的角度，当Z轴向X轴正方向旋转时为负，反之为正，范围【-90,90】
+             val roll = event!!.values[2]
 
-        // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
-       // Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
+             // Log.i(TAG, "onSensorChanged: azimuth=$azimuth pitch=$pitch  roll=$roll")
+             // Log.i(TAG, "onSensorChanged: azimuth=$azimuth")
 
-        if (mPositionMarker != null) {
-            mPositionMarker!!.rotation = azimuth
+             if (mPositionMarker != null) {
+                 mPositionMarker!!.rotation = azimuth
+             }
+         }*/
+
+
+    }
+
+    fun updateOrientationAngles() {
+        // 更新旋转矩阵.
+        // 参数1：
+        // 参数2 ：将磁场数据转换进实际的重力坐标中,一般默认情况下可以设置为null
+        // 参数3：加速度
+        // 参数4：地磁
+        SensorManager.getRotationMatrix(
+            rotationMatrix,
+            null,
+            accelerometerReading,
+            magnetometerReading
+        )
+
+        //根据旋转矩阵计算设备的方向
+        //参数1：旋转数组
+        //参数2：模拟方向传感器的数据
+        SensorManager.getOrientation(rotationMatrix, orientationAngles)
+        val sb = StringBuilder()
+        if (orientationAngles.size >= 3) {
+            sb.append("z轴:${orientationAngles[0]}\n")
+            sb.append("x轴:${orientationAngles[1]}\n")
+            sb.append("y轴:${orientationAngles[2]}\n")
+
+            //Log.i(TAG, "updateOrientationAngles:sb=>> ${sb.toString()}")
+
+            val azimuth = Math.toDegrees(orientationAngles[0].toDouble()).toFloat()
+            if (mPositionMarker != null) {
+                mPositionMarker!!.rotation = azimuth
+            }
+
+            /*float degrees = (float) Math.toDegrees(orientationAngles[0]);
+            if (degrees >= -5 &&degrees < 5) {
+                sb.append("正北"+degrees);
+            } else if (degrees >= 5 && degrees < 85) {
+                sb.append("东北"+degrees);
+            } else if (degrees >= 85 && degrees <= 95) {
+                sb.append("正东"+degrees);
+            } else if (degrees >= 95 && degrees < 175) {
+                sb.append("东南"+degrees);
+            } else if ((degrees >= 175 && degrees <= 180)
+                    || (degrees) >= -180 && degrees < -175) {
+                sb.append("正南"+degrees);
+            } else if (degrees>= -175 && degrees < -95) {
+                sb.append("西南"+degrees);
+            } else if (degrees >= -95 && degrees < -85) {
+                sb.append("正西"+degrees);
+            } else if (degrees >= -85 && degrees < -5) {
+                sb.append("西北"+degrees);
+            }
+            binding.tvValueNew.setText("\n新API:\n"+sb.toString());
+
+            //顺时针转动为正，故手机顺时针转动时，图片得逆时针转动
+            //让图片相对自身中心点转动，开始角度默认为0；此后开始角度等于上一次结束角度
+            RotateAnimation ra = new RotateAnimation(fromDegrees, -degrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            //动画时间200毫秒
+            ra.setDuration(200);
+            ra.setFillAfter(true);
+            binding.ivCompass.startAnimation(ra);
+            fromDegrees = -degrees;*/
+
+
         }
 
     }
