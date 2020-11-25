@@ -767,8 +767,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
         mSensorManager.unregisterListener(this);
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-    }
 
     //加速度传感器数据
     private val accelerometerReading = FloatArray(3)
@@ -823,6 +821,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
          }*/
 
 
+    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
     fun updateOrientationAngles() {
